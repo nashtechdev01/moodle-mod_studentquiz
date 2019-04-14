@@ -75,7 +75,8 @@ function mod_studentquiz_load_studentquiz($cmid, $contextid) {
     return false;
 }
 
-function mod_studentquiz_get_studenquiz_progress_class($questionid, $userid, $studentquizid, $lastanswercorrect = 0, $attempts = 0, $correctattempts = 0) {
+function mod_studentquiz_get_studenquiz_progress_class($questionid, $userid, $studentquizid, $lastanswercorrect = 0, 
+    $attempts = 0, $correctattempts = 0) {
     $studentquizprogress = new stdClass();
     $studentquizprogress->questionid = $questionid;
     $studentquizprogress->userid = $userid;
@@ -690,7 +691,8 @@ function mod_studentquiz_comment_renderer($comments, $userid, $cmid, $anonymize,
  * @param int $limitnum return a subset comprising this many records (optional, required if $limitfrom is set).
  * @return moodle_recordset of paginated ranking table
  */
-function mod_studentquiz_get_user_ranking_table($cmid, $quantifiers, $aggregated, $excluderoles=array(), $limitfrom = 0, $limitnum = 0) {
+function mod_studentquiz_get_user_ranking_table($cmid, $quantifiers, $aggregated, $excluderoles=array(), 
+    $limitfrom = 0, $limitnum = 0) {
     global $DB;
     $select = mod_studentquiz_helper_attempt_stat_select();
     $joins = mod_studentquiz_helper_attempt_stat_joins($aggregated, $excluderoles);

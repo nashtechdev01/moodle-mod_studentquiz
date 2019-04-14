@@ -144,6 +144,11 @@ class restore_studentquiz_activity_structure_step extends restore_questions_acti
         $this->set_mapping('studentquiz', $oldid, $newitemid, true); // Has related files.
     }
 
+    /**
+     * Process the given attempt data
+     *
+     * @param array $data parsed attempt data
+     */
     protected function process_attempt($data) {
         $data = (object)$data;
 
@@ -154,6 +159,11 @@ class restore_studentquiz_activity_structure_step extends restore_questions_acti
         $this->currentattempt = clone($data);
     }
 
+    /**
+     * Process the given rating data
+     *
+     * @param array $data parsed rating data
+     */
     protected function process_rate($data) {
         global $DB;
         $data = (object) $data;
@@ -162,6 +172,11 @@ class restore_studentquiz_activity_structure_step extends restore_questions_acti
         $newitemid = $DB->insert_record('studentquiz_rate', $data);
     }
 
+    /**
+     * Process the given comment data
+     *
+     * @param array $data parsed comment data
+     */
     protected function process_comment($data) {
         global $DB;
         $data = (object) $data;
@@ -170,6 +185,11 @@ class restore_studentquiz_activity_structure_step extends restore_questions_acti
         $DB->insert_record('studentquiz_comment', $data);
     }
 
+    /**
+     * Process the given question meta data
+     *
+     * @param array $data parsed question meta data
+     */
     protected function process_question_meta($data) {
         global $DB;
         $data = (object) $data;
@@ -186,6 +206,11 @@ class restore_studentquiz_activity_structure_step extends restore_questions_acti
     }
 
 
+    /**
+     * Map new usage id to studentquiz_attempt
+     *
+     * @param int $newusageid
+     */
     protected function inform_new_usage_id($newusageid) {
         global $DB;
 

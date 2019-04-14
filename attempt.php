@@ -82,7 +82,7 @@ $hasprevious = $slot > $questionusage->get_first_question_number();
 $canfinish = $questionusage->can_question_finish_during_attempt($slot);
 
 if (data_submitted()) {
-    // On the following navigation steps the question has to be finished and the comment saved
+    // On the following navigation steps the question has to be finished and the comment saved.
     if (optional_param('next', null, PARAM_BOOL) || optional_param('finish', null, PARAM_BOOL)) {
         $transaction = $DB->start_delegated_transaction();
         $questionusage->finish_question($slot);
@@ -113,7 +113,7 @@ if (data_submitted()) {
         // We save the attempts always to db, as there is no finish/submission step expected for the user.
         question_engine::save_questions_usage_by_activity($questionusage);
 
-        // Only add studentquiz_progress information, if it is a studentquiz aggregated type
+        // Only add studentquiz_progress information, if it is a studentquiz aggregated type.
         if ($studentquiz->aggregated) {
             $qa = $questionusage->get_question_attempt($slot);
             $q = $questionusage->get_question($slot);

@@ -242,7 +242,7 @@ class mod_studentquiz_bank_view_test extends advanced_testcase {
     protected function set_filter($which, $value) {
         $_POST[$which] = $value;
         $_POST["submitbutton"] = "Filter";
-        // session key is required, otherwise it won't try to load and filter POSTed data
+        // Session key is required, otherwise it won't try to load and filter POSTed data.
         $_POST["_qf__mod_studentquiz_question_bank_filter_form"] = "1";
         $_POST["sesskey"] = sesskey();
     }

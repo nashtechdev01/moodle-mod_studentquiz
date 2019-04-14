@@ -40,6 +40,8 @@ require_once(__DIR__ . '/anonym_creator_name_column.php');
 require_once(__DIR__ . '/preview_column.php');
 require_once(__DIR__ . '/question_name_column.php');
 
+use \mod_studentquiz\condition\studentquiz_condition;
+
 /**
  * Module instance settings form
  *
@@ -128,7 +130,7 @@ class studentquiz_bank_view extends \core_question\bank\view {
         // Init search conditions with filterform state.
         $cateorycondition = new \core_question\bank\search\category_condition(
                 $pagevars['cat'], $pagevars['recurse'], $contexts, $pageurl, $course);
-        $studentquizcondition = new \mod_studentquiz\condition\studentquiz_condition($cm, $this->filterform, $this->report, $studentquiz);
+        $studentquizcondition = new studentquiz_condition($cm, $this->filterform, $this->report, $studentquiz);
         $this->isfilteractive = $studentquizcondition->is_filter_active();
         $this->searchconditions = array ($cateorycondition, $studentquizcondition);
         $this->renderer = $PAGE->get_renderer('mod_studentquiz', 'overview');
@@ -526,19 +528,23 @@ class studentquiz_bank_view extends \core_question\bank\view {
         list($categoryid, $contextid) = explode(',', $categoryandcontext);
         $catcontext = \context::instance_by_id($contextid);
 
+        $hasquestionsincategory = $this->has_questions_in_category();
+
         $output .= \html_writer::start_tag('fieldset', array('class' => 'invisiblefieldset', 'style' => 'display:block;'));
 
         $output .= $this->renderer->render_hidden_field($this->cm->id, $this->get_filtered_question_ids(), $this->baseurl);
 
-        $output .= $this->renderer->render_control_buttons($catcontext, $this->has_questions_in_category(), $addcontexts, $category);
+        $output .= $this->renderer->render_control_buttons($catcontext, $hasquestionsincategory, $addcontexts, $category);
 
-        $output .= $this->renderer->render_pagination_bar($this->pagevars, $this->baseurl, $this->totalnumber, $page, $perpage, $pageurl);
+        $output .= $this->renderer->render_pagination_bar($this->pagevars, $this->baseurl, 
+            $this->totalnumber, $page, $perpage, $pageurl);
 
         $output .= $this->display_question_list_rows($page);
 
-        $output .= $this->renderer->render_pagination_bar($this->pagevars, $this->baseurl, $this->totalnumber, $page, $perpage, $pageurl);
+        $output .= $this->renderer->render_pagination_bar($this->pagevars, $this->baseurl, 
+            $this->totalnumber, $page, $perpage, $pageurl);
 
-        $output .= $this->renderer->render_control_buttons($catcontext, $this->has_questions_in_category(), $addcontexts, $category);
+        $output .= $this->renderer->render_control_buttons($catcontext, $hasquestionsincategory, $addcontexts, $category);
 
         $output .= \html_writer::end_tag('fieldset');
 

@@ -38,7 +38,8 @@ require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 class behat_mod_studentquiz extends behat_base {
 
     /**
-     * @Given /^I set the availability field "(?P<field_string>(?:[^"]|\\")*)" to "(?P<days_value_integer>(?:[^"]|\\")*)" days from now$/
+     * @Given /^I set the availability field "(?P<field_string>(?:[^"]|\\")*)" 
+     * to "(?P<days_value_integer>(?:[^"]|\\")*)" days from now$/
      * @param string $field Field name.
      * @param string $days Number of days from now.
      */

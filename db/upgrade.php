@@ -387,14 +387,14 @@ function xmldb_studentquiz_upgrade($oldversion) {
     }
 
     if ($oldversion < 2018051300) {
-        // Fix wrong parent in question categories if applicable
+        // Fix wrong parent in question categories if applicable.
         mod_studentquiz_fix_wrong_parent_in_question_categories();
 
         upgrade_mod_savepoint(true, 2018051300, 'studentquiz');
     }
 
     if ($oldversion < 2018121101) {
-        // Repair table studentquiz_progress
+        // Repair table studentquiz_progress.
         $table = new xmldb_table('studentquiz_progress');
 
         // Adding fields to table studentquiz_progress.
@@ -431,7 +431,7 @@ function xmldb_studentquiz_upgrade($oldversion) {
     }
 
     if ($oldversion < 2018121102) {
-        // Repair table studentquiz_progress
+        // Repair table studentquiz_progress.
 
         $table = new xmldb_table('studentquiz');
         $field = new xmldb_field('aggregated', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');

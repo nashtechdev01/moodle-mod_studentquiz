@@ -404,9 +404,9 @@ class mod_studentquiz_privacy_testcase extends provider_testcase {
         $this->assertEmpty($data->questions);
 
         // Skipped for now. Reasons:
-        // (1) mysqli_native_moodle_database.php:1331 doesn't like php 7.2
-        // (2) this table is currently not used
-        // $this->assertEmpty($data->progresses);
+        // (1) mysqli_native_moodle_database.php:1331 doesn't like php 7.2.
+        // (2) this table is currently not used.
+        // $this->assertEmpty($data->progresses);.
         $this->assertEmpty($data->practices);
         $this->assertEmpty($data->attempts);
 
@@ -554,8 +554,8 @@ class mod_studentquiz_privacy_testcase extends provider_testcase {
         $this->assertFalse($DB->record_exists('studentquiz_attempt', $params));
         $this->assertFalse($DB->record_exists('studentquiz_comment', $params));
         // Skipped for now. Reasons:
-        // (1) mysqli_native_moodle_database.php:1331 doesn't like php 7.2
-        // (2) this table is currently not used
+        // (1) mysqli_native_moodle_database.php:1331 doesn't like php 7.2.
+        // (2) this table is currently not used.
 
         // $this->assertFalse($DB->record_exists('studentquiz_progress', $params));
         // Check personal data belong to second user still existed.
@@ -567,8 +567,8 @@ class mod_studentquiz_privacy_testcase extends provider_testcase {
         $this->assertTrue($DB->record_exists('studentquiz_attempt', $params));
         $this->assertTrue($DB->record_exists('studentquiz_comment', $params));
         // Skipped for now. Reasons:
-        // (1) mysqli_native_moodle_database.php:1331 doesn't like php 7.2
-        // (2) this table is currently not used
+        // (1) mysqli_native_moodle_database.php:1331 doesn't like php 7.2.
+        // (2) this table is currently not used.
         // $this->assertTrue($DB->record_exists('studentquiz_progress', $params));
     }
 

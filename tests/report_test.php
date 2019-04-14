@@ -102,9 +102,10 @@ class mod_studentquiz_report_testcase extends advanced_testcase {
         // $studentquizview = new mod_studentquiz_view($course, $this->context, $this->cm, $this->studentquiz, $user->id);
         // var_dump($studentquizview->get_questionbank()->get_questions());
 
-        // Load attempt data
+        // Load attempt data.
         $attempt = mod_studentquiz_generate_attempt($questionids, $this->studentquiz, $users[0]->id);
-        $questionusage = question_engine::load_questions_usage_by_activity($attempt->questionusageid); // THIS internally does also load_from_records!
+        // THIS internally does also load_from_records!
+        $questionusage = question_engine::load_questions_usage_by_activity($attempt->questionusageid);
 
         $questions[0]->start_attempt(new question_attempt_step(array('answer' => '0'), time(), $users[0]->id), 1);
         $questionusage->process_all_actions();
@@ -117,7 +118,8 @@ class mod_studentquiz_report_testcase extends advanced_testcase {
          *
          Attention! Here userid = userid with attempt -> speciality studentquiz, just in case...
          $records = new question_test_recordset(array(
-            array('questionattemptid', 'contextid', 'questionusageid', 'slot', 'behaviour',         'timecreated', 'userid', 'name', 'value'),
+            array('questionattemptid', 'contextid', 'questionusageid', 'slot', 
+                'behaviour', 'timecreated', 'userid', 'name', 'value'),
             array($attempt->id, $this->context->id, $attempt->questionusageid, 1, STUDENTQUIZ_DEFAULT_QUIZ_BEHAVIOUR,
                 $questions[0]->id, 1, 2.0000000, 0.0000000, 1.0000000, 0, '', '', '', 1256233790, 1, 0, 'todo',
                       null, 1256233700, $users[0]->id,       null, null),
@@ -145,7 +147,8 @@ class mod_studentquiz_report_testcase extends advanced_testcase {
         ));
         TODO: Save attempt to DB -> load mod_studentquiz_report to query results
         question_bank::start_unit_test();
-        $qa = question_attempt::load_from_records($records, $attempt->id, new question_usage_null_observer(), STUDENTQUIZ_DEFAULT_QUIZ_BEHAVIOUR);
+        $qa = question_attempt::load_from_records($records, $attempt->id, new question_usage_null_observer(), 
+            STUDENTQUIZ_DEFAULT_QUIZ_BEHAVIOUR);
         question_bank::end_unit_test();
         */
         // Probably not needed, but was a try.
@@ -154,7 +157,7 @@ class mod_studentquiz_report_testcase extends advanced_testcase {
             $questionusage->finish_question($slot);
         }
 
-        // save to db, was the hope
+        // Save to db, was the hope.
         question_engine::save_questions_usage_by_activity($questionusage);
 
         /*

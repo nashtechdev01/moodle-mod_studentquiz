@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * This class controls from which category questions are listed.
  * @package    mod_studentquiz
  * @copyright  2017 HSR (http://www.hsr.ch)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -47,8 +48,6 @@ class studentquiz_condition extends \core_question\bank\search\condition {
        Which is fortunate, as there'd be no way to keep where() and params()
        in sync.
     */
-
-
     public function __construct($cm, $filterform, $report, $studentquiz) {
         $this->cm = $cm;
         $this->filterform = $filterform;
@@ -59,31 +58,46 @@ class studentquiz_condition extends \core_question\bank\search\condition {
         $this->init();
     }
 
+    // Course module.
     protected $cm;
+
     // Search condition depends on filterform.
     protected $filterform;
 
+    // StudentQuiz.
     protected $studentquiz;
 
     /** @var  \mod_studentquiz_report */
     protected $report;
 
+    // Tests.
     protected $tests;
 
+    // Params.
     protected $params;
 
+    // IsFilterActive.
     protected $isfilteractive = false;
 
+    /**
+     * Public getter for isfilteractive
+     */
     public function is_filter_active() {
         return $this->isfilteractive;
     }
 
     protected $istagfilteractive = false;
 
+    /**
+     * Public getter for istagfilteractive
+     */
     public function is_tag_filter_active() {
         return $this->istagfilteractive;
     }
 
+    /**
+     * Initialize
+     */
     protected function init() {
         if ($adddata = $this->filterform->get_data()) {
 
@@ -104,14 +118,18 @@ class studentquiz_condition extends \core_question\bank\search\condition {
 
                 $sqldata = $field->get_sql_filter($data);
 
-                // Disable filtering by firstname if anonymized
-                if ($field->_name == 'firstname' && !(mod_studentquiz_check_created_permission($this->cm->id) || !$this->report->is_anonymized())) {
-                    continue;
+                // Disable filtering by firstname if anonymized.
+                if ($field->_name == 'firstname') {
+                    if (!(mod_studentquiz_check_created_permission($this->cm->id) || !$this->report->is_anonymized())) {
+                        continue;
+                    }
                 }
 
-                // Disable filtering by firstname if anonymized
-                if ($field->_name == 'lastname' && !(mod_studentquiz_check_created_permission($this->cm->id) || !$this->report->is_anonymized())) {
-                    continue;
+                // Disable filtering by firstname if anonymized.
+                if ($field->_name == 'lastname') {
+                    if (!(mod_studentquiz_check_created_permission($this->cm->id) || !$this->report->is_anonymized())) {
+                        continue;
+                    }
                 }
 
                 if ($field->_name == 'tagname') {
@@ -138,6 +156,9 @@ class studentquiz_condition extends \core_question\bank\search\condition {
         }
     }
 
+    /**
+     * Helper to modify sql data object
+     */
     private function get_special_sql($sqldata, $name) {
         if ($this->studentquiz->aggregated) {
             if (substr($sqldata, 0, 12) === 'mydifficulty') {
@@ -150,6 +171,9 @@ class studentquiz_condition extends \core_question\bank\search\condition {
         return $sqldata;
     }
 
+    /**
+     * Helper to get field by name
+     */
     private function get_sql_field($name) {
         if ($this->studentquiz->aggregated) {
             if (substr($name, 0, 12) === 'mydifficulty') {
@@ -201,7 +225,7 @@ class studentquiz_condition extends \core_question\bank\search\condition {
     }
 
     /**
-     * @Return an SQL fragment to be ANDed into the WHERE clause to filter which questions are shown.
+     * Return an SQL fragment to be ANDed into the WHERE clause to filter which questions are shown.
      * @return string SQL fragment. Must use named parameters.
      */
     public function where() {
