@@ -179,8 +179,7 @@ function mod_studentquiz_migrate_single_studentquiz_instances_to_aggregated_stat
 function mod_studentquiz_get_studentquiz_progress_from_question_attempts_steps($studentquizid, $context) {
     global $DB;
 
-    $sql = "SELECT innerq.questionid, innerq.userid, :studentquizid AS studentquizid,
-                   innerq.attempts, innerq.correctattempts,
+    $sql = "SELECT innerq.questionid, innerq.userid, innerq.attempts, innerq.correctattempts,
                    CASE WHEN qas1.state = :rightstate2 THEN 1 ELSE 0 END AS lastanswercorrect
 
               FROM (
@@ -188,9 +187,9 @@ function mod_studentquiz_get_studentquiz_progress_from_question_attempts_steps($
                            COUNT(qas.id) AS attempts,
                            SUM(CASE WHEN qas.state = :rightstate3 THEN 1 ELSE 0 END) AS correctattempts
 
-                      FROM mdl_question_usages qu
-                      JOIN mdl_question_attempts qa ON qa.questionusageid = qu.id
-                      JOIN mdl_question_attempt_steps qas ON qas.questionattemptid = qa.id
+                      FROM {question_usages} qu
+                      JOIN {question_attempts} qa ON qa.questionusageid = qu.id
+                      JOIN {question_attempt_steps} qas ON qas.questionattemptid = qa.id
 
                      WHERE qu.contextid = :contextid1
                            AND qas.state IN (:rightstate, :partialstate, :wrongstate)
@@ -198,26 +197,26 @@ function mod_studentquiz_get_studentquiz_progress_from_question_attempts_steps($
                   GROUP BY qa.questionid, qas.userid
                     ) innerq
 
-              JOIN mdl_question_attempt_steps qas1 ON qas1.id = (
+              JOIN {question_attempt_steps} qas1 ON qas1.id = (
                    SELECT MAX(qas_last.id)
-                     FROM mdl_question_usages qu_last
-                     JOIN mdl_question_attempts qa_last ON qa_last.questionusageid = qu_last.id AND qa_last.questionid = innerq.questionid
-                     JOIN mdl_question_attempt_steps qas_last ON qas_last.questionattemptid = qa_last.id AND qas_last.userid = innerq.userid
+                     FROM {question_usages} qu_last
+                     JOIN {question_attempts} qa_last ON qa_last.questionusageid = qu_last.id AND qa_last.questionid = innerq.questionid
+                     JOIN {question_attempt_steps} qas_last ON qas_last.questionattemptid = qa_last.id AND qas_last.userid = innerq.userid
                     WHERE qu_last.contextid = :contextid2
                           AND qas_last.state IN (:rightstate1, :partialstate1, :wrongstate1)
                    )";
     $records = $DB->get_recordset_sql($sql, array(
-            'rightstate2' => question_state::$gradedright, 'rightstate3' => question_state::$gradedright,
-            'contextid1' => $context->id, 'contextid2' => $context->id, 'studentquizid' => $studentquizid,
-            'rightstate' => question_state::$gradedright, 'partialstate' => question_state::$gradedpartial,
-            'wrongstate' => question_state::$gradedwrong, 'rightstate1' => question_state::$gradedright,
-            'partialstate1' => question_state::$gradedpartial, 'wrongstate1' => question_state::$gradedwrong));
+            'rightstate2' => (string)question_state::$gradedright, 'rightstate3' => (string)question_state::$gradedright,
+            'contextid1' => $context->id, 'contextid2' => $context->id,
+            'rightstate' => (string)question_state::$gradedright, 'partialstate' => (string)question_state::$gradedpartial,
+            'wrongstate' => (string)question_state::$gradedwrong, 'rightstate1' => (string)question_state::$gradedright,
+            'partialstate1' => (string)question_state::$gradedpartial, 'wrongstate1' => (string)question_state::$gradedwrong));
 
     $studentquizprogresses = array();
 
     foreach ($records as $r) {
         $studentquizprogress = mod_studentquiz_get_studenquiz_progress_class(
-            $r->questionid, $r->userid, $r->studentquizid,
+            $r->questionid, $r->userid, $studentquizid,
             $r->lastanswercorrect, $r->attempts, $r->correctattempts);
         array_push($studentquizprogresses, $studentquizprogress);
     }
