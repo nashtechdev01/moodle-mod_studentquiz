@@ -179,7 +179,7 @@ function mod_studentquiz_migrate_single_studentquiz_instances_to_aggregated_stat
 function mod_studentquiz_get_studentquiz_progress_from_question_attempts_steps($studentquizid, $context) {
     global $DB;
 
-    $sql = "SELECT innerq.questionid, innerq.userid, innerq.attempts, innerq.correctattempts,
+    $sql = "SELECT innerq.questionid as questionid, innerq.userid as userid, innerq.attempts, innerq.correctattempts,
                    CASE WHEN qas1.state = :rightstate2 THEN 1 ELSE 0 END AS lastanswercorrect
 
               FROM (
@@ -200,8 +200,8 @@ function mod_studentquiz_get_studentquiz_progress_from_question_attempts_steps($
               JOIN {question_attempt_steps} qas1 ON qas1.id = (
                    SELECT MAX(qas_last.id)
                      FROM {question_usages} qu_last
-                     JOIN {question_attempts} qa_last ON qa_last.questionusageid = qu_last.id AND qa_last.questionid = innerq.questionid
-                     JOIN {question_attempt_steps} qas_last ON qas_last.questionattemptid = qa_last.id AND qas_last.userid = innerq.userid
+                     JOIN {question_attempts} qa_last ON qa_last.questionusageid = qu_last.id AND qa_last.questionid = questionid
+                     JOIN {question_attempt_steps} qas_last ON qas_last.questionattemptid = qa_last.id AND qas_last.userid = userid
                     WHERE qu_last.contextid = :contextid2
                           AND qas_last.state IN (:rightstate1, :partialstate1, :wrongstate1)
                    )";
