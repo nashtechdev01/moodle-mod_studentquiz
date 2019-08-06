@@ -295,3 +295,17 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.path-mod-studentquiz .mform .form-group.advanced .felement legend {
+    display: inline-block;
+    float: left;
+    width: auto;
+    border-bottom: none;
+    font-size: 1em;
+    margin-right: 1em;
+    margin-top: 0.6em;
+}
+.path-mod-studentquiz .mform .form-group.advanced fieldset {
+    border: none;
+    margin-left: 0;
+}

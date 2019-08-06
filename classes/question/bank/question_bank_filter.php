@@ -150,7 +150,7 @@ class studentquiz_user_filter_date extends user_filter_date {
      * @param object $mform a MoodleForm object to setup
      */
     public function setupForm(&$mform) {
-        parent::setupForm($mform);
+        $this->initFilterDateElements($mform);
         $group = $mform->getElement($this->_name . '_grp');
         if (!empty($group) && !($group instanceof HTML_QuickForm_Error)) {
             $groupElements = $group->getElements();
@@ -182,6 +182,41 @@ class studentquiz_user_filter_date extends user_filter_date {
         }
     }
 
+    /**
+     * Initialise filter date form elements.
+     *
+     * @param object $mform a MoodleForm object to setup
+     * @throws \coding_exception
+     */
+    private function initFilterDateElements(&$mform) {
+        // Add a label here for the screen reader.
+        $datelabel = '<span class="accesshide">' . $this->_label  . '</span>';
+
+        $objs = [];
+        // Add tag fieldset and legend to improve accessibility screen reader.
+        $objs[] = $mform->createElement('static', $this->_name.'_fieldset', null, '<fieldset>');
+        $objs[] = $mform->createElement('static', $this->_name.'_legend', null, '<legend>');
+        $objs[] = $mform->createElement('static', $this->_name.'_sck', null, $datelabel . get_string('isafter', 'filters'));
+        $objs[] = $mform->createElement('static', $this->_name.'_legend', null, '</legend>');
+        $objs[] = $mform->createElement('date_selector', $this->_name.'_sdt', null, ['optional' => true]);
+        $objs[] = $mform->createElement('static', $this->_name.'_break', null, '<br/>');
+        $objs[] = $mform->createElement('static', $this->_name.'_fieldset', null, '</fieldset>');
+        $grp =& $mform->addElement('group', $this->_name.'_grp_sck', $this->_label, $objs, '', false);
+
+        $objs = [];
+        $objs[] = $mform->createElement('static', $this->_name.'_fieldset', null, '<fieldset>');
+        $objs[] = $mform->createElement('static', $this->_name.'_legend', null, '<legend>');
+        $objs[] = $mform->createElement('static', $this->_name.'_edk', null, $datelabel . get_string('isbefore', 'filters'));
+        $objs[] = $mform->createElement('static', $this->_name.'_legend', null, '</legend>');
+        $objs[] = $mform->createElement('date_selector', $this->_name.'_edt', null, ['optional' => true]);
+        $objs[] = $mform->createElement('static', $this->_name.'_legend', null, '</fieldset>');
+        $grp =& $mform->addElement('group', $this->_name.'_grp_edk', '', $objs, '', false);
+
+        if ($this->_advanced) {
+            $mform->setAdvanced($this->_name.'_grp_sck');
+            $mform->setAdvanced($this->_name.'_grp_edk');
+        }
+    }
 }
 
 class toggle_filter_checkbox extends user_filter_checkbox {
